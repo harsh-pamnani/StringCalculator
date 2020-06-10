@@ -22,13 +22,30 @@ public class Addition {
         // Checking whether custom delimiter is present or not
         if(numbers.startsWith(PREFIX_FOR_CUSTOM_DELIMITER)) {
             delimiter = numbers.substring(PREFIX_FOR_CUSTOM_DELIMITER.length(), numbers.indexOf(NEW_LINE));
+
+            // In case of multiple custom delimiters
             if(delimiter.contains(COMMA_DELIMITER)) {
                 multipleDelimitersArray = delimiter.split(COMMA_DELIMITER);
             }
 
+            // Removing all the new line characters and the \\ present at the beginning of string.
             numbers = numbers.replaceAll(NEW_LINE, "").substring(2 + delimiter.length());
         }
 
+        List<String> numbersList = getNumbersList(numbers, multipleDelimitersArray, delimiter);
+        return findSumFromNumberList(numbersList);
+
+    }
+
+    /**
+     * Method to create the list of numbers from given single delimiter and multiple delimiters.
+     *
+     * @param numbers Numbers in String with delimiters
+     * @param multipleDelimitersArray Array holding multiple delimiters
+     * @param delimiter Delimiter in case of single delimiter
+     * @return Returns the list of numbers extracted from given inputs.
+     */
+    private List<String> getNumbersList(String numbers, String [] multipleDelimitersArray, String delimiter) {
         // Creating an empty list to hold numbers.
         List<String> numbersList = new ArrayList<String>();
 
@@ -50,6 +67,17 @@ public class Addition {
             numbersList = Arrays.asList(numbers.split(Pattern.quote(delimiter)));
         }
 
+        return numbersList;
+    }
+
+    /**
+     * Method to find out the sum of given numbers in the list.
+     *
+     * @param numbersList Input list containing all the numbers
+     * @return Return the sum of numbers.
+     * @throws NegativesNotAllowedException Thrown in case of negatives numbers are found in the list.
+     */
+    private int findSumFromNumberList(List<String> numbersList) throws NegativesNotAllowedException {
         int sum = 0;
         List<Integer> negativeNumbersList = new ArrayList<Integer>();
         // Looping over all the numbers found from above processing
